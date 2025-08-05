@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>E-Commerce Backend Test</title>
+</head>
+<body>
+  <h2>Task 3 - E-Commerce Backend Test</h2>
+
+  <h3>Register & Login</h3>
+  <input id="username" placeholder="Username">
+  <input id="email" placeholder="Email">
+  <input id="password" placeholder="Password" type="password">
+  <button onclick="register()">Register</button>
+  <button onclick="login()">Login</button>
+
+  <h3>Products</h3>
+  <input id="pname" placeholder="Product Name">
+  <input id="pprice" placeholder="Price" type="number">
+  <input id="pstock" placeholder="Stock" type="number">
+  <button onclick="createProduct()">Add Product</button>
+  <button onclick="getProducts()">Get Products</button>
+  
+  <h3>Orders</h3>
+  <input id="prodId" placeholder="Product ID">
+  <input id="qty" placeholder="Quantity" type="number">
+  <button onclick="createOrder()">Place Order</button>
+
+  <pre id="output"></pre>
+
+  <script>
+    let token = "";
+
+    async function register() {
+      const res = await fetch('http://localhost:5000/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: document.getElementById('username').value,
+          email: document.getElementById('email').value,
+          password: document.getElementById('password').value
+        })
+      });
+      document.getElementById('output').innerText = await res.text();
+    }
+
+    async function login() {
+      const res = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: document.getElementById('email').value,
+          password: document.getElementById('password').value
+        })
+      });
+      const data = await res.json();
+      token = data.token;
+      document.getElementById('output').innerText = JSON.stringify(data, null, 2);
+    }
+
+    async function createProduct() {
+      const res = await fetch('http://localhost:5000/api/products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': token },
+        body: JSON.stringify({
+          name: document.getElementById('pname').value,
+          price: document.getElementById('pprice').value,
+          stock: document.getElementById('pstock').value
+        })
+      });
+      document.getElementById('output').innerText = await res.text();
+    }
+
+    async function getProducts() {
+      const res = await fetch('http://localhost:5000/api/products');
+      document.getElementById('output').innerText = await res.text();
+    }
+
+    async function createOrder() {
+      const res = await fetch('http://localhost:5000/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': token },
+        body: JSON.stringify({
+          userId: 1,
+          productId: document.getElementById('prodId').value,
+          quantity: document.getElementById('qty').value
+        })
+      });
+      document.getElementById('output').innerText = await res.text();
+    }
+  </script>
+</body>
+</html>
