@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Recommendation Test</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+    input { padding: 8px; width: 250px; }
+    button { padding: 8px 15px; margin: 10px; }
+    #results { margin-top: 20px; font-size: 18px; color: #333; }
+    li { margin: 5px 0; }
+    #clearBtn { display: none; background-color: crimson; color: white; }
+  </style>
+</head>
+<body>
+  <h2>🎬 Movie Recommendation Engine Test</h2>
+  <input type="text" id="movieTitle" placeholder="Enter movie title (e.g., Toy Story)">
+  <button onclick="getRecommendations()">Get Recommendations</button>
+  <button id="clearBtn" onclick="clearResults()">Clear Results</button>
+
+  <ul id="results"></ul>
+
+  <script>
+    async function getRecommendations() {
+      const title = document.getElementById('movieTitle').value.trim();
+      const resultsList = document.getElementById('results');
+      const clearBtn = document.getElementById('clearBtn');
+
+      if (!title) {
+        resultsList.innerHTML = "<li>Please enter a movie title.</li>";
+        clearBtn.style.display = "block";
+        return;
+      }
+
+      resultsList.innerHTML = "<li>Loading...</li>";
+      clearBtn.style.display = "none";
+
+      try {
+        const response = await fetch(`http://127.0.0.1:5001/recommend?title=${encodeURIComponent(title)}`);
+        const data = await response.json();
+
+        resultsList.innerHTML = "";
+        if (data.recommendations && data.recommendations.length > 0) {
+          data.recommendations.forEach(movie => {
+            const li = document.createElement('li');
+            li.textContent = movie;
+            resultsList.appendChild(li);
+          });
+        } else {
+          resultsList.innerHTML = "<li>No recommendations found.</li>";
+        }
+
+        clearBtn.style.display = "inline-block"; // Show clear button after fetch
+      } catch (error) {
+        resultsList.innerHTML = `<li>Error: ${error.message}</li>`;
+        clearBtn.style.display = "inline-block";
+      }
+    }
+
+    function clearResults() {
+      document.getElementById('results').innerHTML = "";
+      document.getElementById('movieTitle').value = "";
+      document.getElementById('clearBtn').style.display = "none";
+    }
+  </script>
+</body>
+</html>
