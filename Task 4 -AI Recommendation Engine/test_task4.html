@@ -7,7 +7,7 @@
   <style>
     body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
     input { padding: 8px; width: 250px; }
-    button { padding: 8px 15px; margin: 10px; }
+    button { padding: 8px 15px; margin: 10px; cursor: pointer; }
     #results { margin-top: 20px; font-size: 18px; color: #333; }
     li { margin: 5px 0; }
     #clearBtn { display: none; background-color: crimson; color: white; }
@@ -22,10 +22,20 @@
   <ul id="results"></ul>
 
   <script>
+    const input = document.getElementById('movieTitle');
+    const resultsList = document.getElementById('results');
+    const clearBtn = document.getElementById('clearBtn');
+
+    // Trigger recommendations when pressing Enter
+    input.addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        getRecommendations();
+      }
+    });
+
     async function getRecommendations() {
-      const title = document.getElementById('movieTitle').value.trim();
-      const resultsList = document.getElementById('results');
-      const clearBtn = document.getElementById('clearBtn');
+      const title = input.value.trim();
 
       if (!title) {
         resultsList.innerHTML = "<li>Please enter a movie title.</li>";
@@ -59,9 +69,9 @@
     }
 
     function clearResults() {
-      document.getElementById('results').innerHTML = "";
-      document.getElementById('movieTitle').value = "";
-      document.getElementById('clearBtn').style.display = "none";
+      resultsList.innerHTML = "";
+      input.value = "";
+      clearBtn.style.display = "none";
     }
   </script>
 </body>
