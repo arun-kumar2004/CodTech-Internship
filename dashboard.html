@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CodTech Internship Dashboard</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #1e3c72, #2a5298);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    .container {
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      font-size: 2.5em;
+      animation: slideDown 1s ease;
+    }
+
+    .cards {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 30px 20px;
+      width: 200px;
+      text-align: center;
+      transition: transform 0.3s, background 0.3s;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .card:hover {
+      transform: translateY(-10px) scale(1.05);
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .card h3 {
+      margin-bottom: 10px;
+    }
+
+    /* Developer name animation */
+    .signature {
+      position: absolute;
+      font-size: 1.3em;
+      font-weight: bold;
+      color: #ffcc00;
+      text-shadow: 0 0 10px #ffcc00, 0 0 20px #ffaa00;
+      animation: colorChange 4s infinite alternate;
+      transition: top 1s ease, left 1s ease, transform 0.5s ease;
+    }
+
+    @keyframes colorChange {
+      0% { color: #ffcc00; text-shadow: 0 0 10px #ffcc00; }
+      25% { color: #00ffcc; text-shadow: 0 0 10px #00ffcc; }
+      50% { color: #ff66ff; text-shadow: 0 0 10px #ff66ff; }
+      75% { color: #00ff66; text-shadow: 0 0 10px #00ff66; }
+      100% { color: #ff4444; text-shadow: 0 0 10px #ff4444; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>🚀 CodTech Internship Dashboard</h1>
+    <div class="cards">
+      <div class="card" onclick="openTask('Task 1 -Blog-backend/index.html')">
+        <h3>Task 1</h3>
+        <p>Blog Backend</p>
+      </div>
+      <div class="card" onclick="openTask('Task 2-Real-Time Chat Server/client.html')">
+        <h3>Task 2</h3>
+        <p>Real-Time Chat Server</p>
+      </div>
+      <div class="card" onclick="openTask('Task 3- E-Commerce Backend/index.html')">
+        <h3>Task 3</h3>
+        <p>E-Commerce Backend</p>
+      </div>
+      <div class="card" onclick="openTask('Task 4 -AI Recommendation Engine/test_task4.html')">
+        <h3>Task 4</h3>
+        <p>AI Recommendation Engine</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Animated Developer Signature -->
+  <div class="signature" id="signature">✨ Developed by Arun Kumar ✨</div>
+
+  <script>
+    function openTask(file) {
+      window.open(file, "_blank");
+    }
+
+    const signature = document.getElementById('signature');
+    const corners = [
+      { top: '10px', left: '10px' }, // top-left
+      { top: '10px', right: '10px', left: '' }, // top-right
+      { bottom: '10px', left: '10px', top: '' }, // bottom-left
+      { bottom: '10px', right: '10px', top: '', left: '' } // bottom-right
+    ];
+    
+    let currentCorner = 0;
+    function moveSignature() {
+      const c = corners[currentCorner];
+      signature.style.top = c.top || '';
+      signature.style.bottom = c.bottom || '';
+      signature.style.left = c.left || '';
+      signature.style.right = c.right || '';
+      signature.style.transform = 'scale(1.2)';
+      
+      // Reset scale after small delay for smooth effect
+      setTimeout(() => {
+        signature.style.transform = 'scale(1)';
+      }, 500);
+
+      currentCorner = (currentCorner + 1) % corners.length;
+    }
+
+    moveSignature(); // initial
+    setInterval(moveSignature, 3000); // change corner every 3 seconds
+  </script>
+
+</body>
+</html>
